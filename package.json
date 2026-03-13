@@ -1,0 +1,17 @@
+{
+  "name": "fitbite-backend",
+  "version": "1.0.0",
+  "description": "A one stop solution to all you Fitness needs",
+  "keywords": [
+    "fitbite",
+    "javascript",
+    "backend"
+  ],
+  "license": "ISC",
+  "author": "Yash Chaudhari",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
