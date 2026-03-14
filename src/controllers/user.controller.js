@@ -6,38 +6,41 @@ import { apiResponse } from '../utils/apiResponse.js'
 const registerUser = asyncHandler(async (req, res) => {
     const { userName, email, password, age, height, weight, goal } = req.body
 
-    if ([userName, email, password, age, height, weight, goal].some((field) => field?.trim() === "")) {
+    if (
+        [userName, email, password, goal].some((field) => field?.trim() === "") ||
+        [age, height, weight].some((num) => num === undefined || num === null)
+    ) {
         throw new apiError(400, "All fields are required")
     }
 
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         $or: [{ userName }, { email }]
     })
 
     if (existedUser) {
-        throw new apiError(409, "User already exists")
+        throw new apiError(409, "User with this email or username already exists")
     }
 
-    User.create({
-        userName,
+    const user = await User.create({
+        userName: userName.toLowerCase(),
         email,
         password,
         age,
         height,
         weight,
-        goal
+        goal,
+        subscription: "Basic"
     })
 
-    const createdUser = await User.findById(User._id).select("-password -refreshToken")
+    const createdUser = await User.findById(user._id).select("-password -refreshToken")
 
     if (!createdUser) {
         throw new apiError(500, "Something went wrong while registering the user")
     }
 
     return res.status(201).json(
-        new apiResponse(200, createdUser, "User Registered Successfully!")
+        new apiResponse(201, createdUser, "User Registered Successfully!")
     )
-
 })
 
 export { registerUser }
