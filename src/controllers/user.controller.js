@@ -121,4 +121,19 @@ const getCurrentUser = asyncHandler(async (req, res) => {
         .json(new apiResponse(200, req.user, 'Current user fetched successfully'))
 })
 
-export { registerUser, loginUser, logoutUser, getCurrentUser }
+// ─── Update subscription ──────────────────────────────────────────────────────
+const updateSubscription = asyncHandler(async (req, res) => {
+  const { plan } = req.body
+  const validPlans = ['Basic', 'Pro', 'Ultimate']
+  if (!validPlans.includes(plan)) throw new apiError(400, 'Invalid plan')
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { subscription: plan },
+    { new: true }
+  ).select('-password -refreshToken')
+
+  return res.status(200).json(new apiResponse(200, user, `Subscription updated to ${plan}`))
+})
+
+export { registerUser, loginUser, logoutUser, getCurrentUser, updateSubscription }
