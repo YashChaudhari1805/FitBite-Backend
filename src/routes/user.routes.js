@@ -4,12 +4,14 @@ import {
   loginUser,
   logoutUser,
   getCurrentUser,
-  updateSubscription
+  updateSubscription,
+  updateProfile
 } from '../controllers/user.controller.js'
 import { verifyJWT } from '../middlewares/auth.middleware.js'
 
 const router = Router()
 
+// Public
 router.route('/register').post(registerUser)
 router.route('/login').post(loginUser)
 
@@ -17,5 +19,6 @@ router.route('/login').post(loginUser)
 router.route('/logout').post(verifyJWT, logoutUser)
 router.route('/me').get(verifyJWT, getCurrentUser)
 router.route('/subscription').patch(verifyJWT, updateSubscription)
+router.route('/profile').patch(verifyJWT, updateProfile)
 
 export default router
