@@ -6,14 +6,13 @@ const app = express()
 
 // Allowed origins — add your Vercel URL here
 const allowedOrigins = [
-  process.env.CORS_ORIGIN,        // e.g. https://fitbite-react.vercel.app
-  'http://localhost:5173',         // local dev
-  'http://localhost:4173',         // local preview (vite preview)
-].filter(Boolean)                  // remove undefined if env var not set
+  process.env.CORS_ORIGIN,        
+  'http://localhost:5173',         
+  'http://localhost:4173',         
+].filter(Boolean)                  
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (Postman, curl, server-to-server)
     if (!origin) return callback(null, true)
 
     if (allowedOrigins.includes(origin)) {
